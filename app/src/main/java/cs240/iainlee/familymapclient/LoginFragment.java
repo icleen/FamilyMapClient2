@@ -20,6 +20,8 @@ import android.widget.Button;
  */
 public class LoginFragment extends Fragment {
 	
+	private static final String TAG = "LoginFrag";
+	
 	private Button mLoginButton;
 	private OnLoginListener mListener;
 	

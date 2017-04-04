@@ -20,6 +20,30 @@
             android:layout_height="wrap_content"
             android:text="@string/logout_button"/>
 
+        <Button
+            android:id="@+id/person_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To person class"/>
+
+        <Button
+            android:id="@+id/settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="settings"/>
+
+        <Button
+            android:id="@+id/filter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="filters"/>
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="search"/>
+
     </LinearLayout>
 
 </FrameLayout>

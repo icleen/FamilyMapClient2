@@ -1,9 +1,11 @@
 package cs240.iainlee.familymapclient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,14 @@ import android.widget.Button;
  */
 public class FamilyMapFragment extends Fragment {
 	
+	private static final String TAG = "FamilyMapFrag";
+	
 	private Button mLogoutButton;
+	private Button mToPerson;
+	private Button mToSettings;
+	private Button mToFilters;
+	private Button mToSearch;
+	
 	private OnLogoutListener mListener;
 	
 	public FamilyMapFragment() {
@@ -63,12 +72,55 @@ public class FamilyMapFragment extends Fragment {
 				onLogout();
 			}
 		});
+		
+		mToPerson = (Button) view.findViewById(R.id.person_button);
+		mToPerson.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onChangeActivity(PersonActivity.class);
+			}
+		});
+		
+		mToSettings = (Button) view.findViewById(R.id.settings_button);
+		mToSettings.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onChangeActivity(SettingsActivity.class);
+			}
+		});
+		
+		mToFilters = (Button) view.findViewById(R.id.filter_button);
+		mToFilters.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onChangeActivity(FilterActivity.class);
+			}
+		});
+		
+		mToSearch = (Button) view.findViewById(R.id.search_button);
+		mToSearch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onChangeActivity(SearchActivity.class);
+			}
+		});
 		return view;
 	}
 	
-	public void onLogout() {
+	private void onLogout() {
 		if (mListener != null) {
 			mListener.onLogout();
+		}
+	}
+	
+	private void onChangeActivity(Class k) {
+		try {
+			Log.d(TAG, "to " + k.getSimpleName());
+			Intent intent = new Intent(getActivity(), k);
+			startActivity(intent);
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		}
 	}
 	
