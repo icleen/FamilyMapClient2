@@ -1,20 +1,18 @@
 package cs240.iainlee.familymapclient;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.amazon.geo.mapsv2.AmazonMap;
 import com.amazon.geo.mapsv2.MapFragment;
-
-import cs240.iainlee.models.Event;
-import cs240.iainlee.models.Person;
+import com.amazon.geo.mapsv2.SupportMapFragment;
 
 
 /**
@@ -29,8 +27,10 @@ public class FamilyMapFragment extends Fragment {
 	
 	private static final String TAG = "FamilyMapFrag";
 	
-	private MapFragment mMapFragment;
+	private SupportMapFragment mMapFragment;
 	private static final String MAP_FRAGMENT_TAG = "mapfragment";
+	private AmazonMap mAmazonMap;
+	
 	private static final String ARG_PARAM1 = "people";
 	private static final String ARG_PARAM2 = "events";
 	
@@ -106,7 +106,7 @@ public class FamilyMapFragment extends Fragment {
 			}
 		});
 		
-		mMapFragment = MapFragment.newInstance();
+		mMapFragment = SupportMapFragment.newInstance();
 
 		// Add the new fragment to the fragment manager. Note that
 		// fragment_container is the ID for the frame layout defined in
