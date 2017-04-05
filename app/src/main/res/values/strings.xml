@@ -6,4 +6,29 @@
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="logout_button">Logout</string>
+
+    <string name="prompt_server_host">Server Host</string>
+    <string name="prompt_server_port">Server Port</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_firstName">First Name</string>
+    <string name="prompt_lastName">Last Name</string>
+    <string name="prompt_gender">Gender</string>
+
+    <string name="title_server_host">Server Host:</string>
+    <string name="title_server_port">Server Port:</string>
+    <string name="title_username">Username:</string>
+    <string name="title_email">Email:</string>
+    <string name="title_password">Password:</string>
+    <string name="title_firstName">First Name:</string>
+    <string name="title_lastName">Last Name:</string>
+    <string name="title_gender">Gender:</string>
+
+    <string name="radio_button_male">Male</string>
+    <string name="radio_button_female">Female</string>
+
+    <string name="action_sign_in">Sign In</string>
+    <string name="action_register">Register</string>
+
 </resources>

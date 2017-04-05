@@ -1,7 +1,6 @@
 package cs240.iainlee.familymapclient;
 
-import android.app.FragmentManager;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.amazon.geo.mapsv2.MapFragment;
+
+import cs240.iainlee.models.Event;
+import cs240.iainlee.models.Person;
 
 
 /**
@@ -29,6 +31,8 @@ public class FamilyMapFragment extends Fragment {
 	
 	private MapFragment mMapFragment;
 	private static final String MAP_FRAGMENT_TAG = "mapfragment";
+	private static final String ARG_PARAM1 = "people";
+	private static final String ARG_PARAM2 = "events";
 	
 	private Button mLogoutButton;
 	private Button mToPerson;
@@ -49,21 +53,12 @@ public class FamilyMapFragment extends Fragment {
 	 */
 	// TODO: Rename and change types and number of parameters
 	public static FamilyMapFragment newInstance() {
-		FamilyMapFragment fragment = new FamilyMapFragment();
-//		Bundle args = new Bundle();
-//		args.putString(ARG_PARAM1, param1);
-//		args.putString(ARG_PARAM2, param2);
-//		fragment.setArguments(args);
-		return fragment;
+		return new FamilyMapFragment();
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		if (getArguments() != null) {
-//			mParam1 = getArguments().getString(ARG_PARAM1);
-//			mParam2 = getArguments().getString(ARG_PARAM2);
-//		}
 	}
 	
 	@Override
@@ -116,8 +111,8 @@ public class FamilyMapFragment extends Fragment {
 		// Add the new fragment to the fragment manager. Note that
 		// fragment_container is the ID for the frame layout defined in
 		// programmatic_layout.xml
-//		getFragmentManager().beginTransaction()
-//				.add(R.id.mapFragment, mMapFragment, MAP_FRAGMENT_TAG).commit();
+		getFragmentManager().beginTransaction()
+				.add(R.id.mapFragment, mMapFragment, MAP_FRAGMENT_TAG).commit();
 		
 		return view;
 	}
