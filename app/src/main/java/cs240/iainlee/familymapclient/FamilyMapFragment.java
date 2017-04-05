@@ -12,7 +12,16 @@ import android.widget.Button;
 
 import com.amazon.geo.mapsv2.AmazonMap;
 import com.amazon.geo.mapsv2.MapFragment;
+import com.amazon.geo.mapsv2.OnMapReadyCallback;
 import com.amazon.geo.mapsv2.SupportMapFragment;
+import com.amazon.geo.mapsv2.model.LatLng;
+import com.amazon.geo.mapsv2.model.Marker;
+import com.amazon.geo.mapsv2.model.MarkerOptions;
+
+import java.util.ArrayList;
+
+import cs240.iainlee.models.Event;
+import cs240.iainlee.models.UserInfo;
 
 
 /**
@@ -29,7 +38,6 @@ public class FamilyMapFragment extends Fragment {
 	
 	private SupportMapFragment mMapFragment;
 	private static final String MAP_FRAGMENT_TAG = "mapfragment";
-	private AmazonMap mAmazonMap;
 	
 	private static final String ARG_PARAM1 = "people";
 	private static final String ARG_PARAM2 = "events";
@@ -39,6 +47,8 @@ public class FamilyMapFragment extends Fragment {
 	private Button mToSettings;
 	private Button mToFilters;
 	private Button mToSearch;
+	
+	private ArrayList<Marker> mEventMarkers;
 	
 	private OnLogoutListener mListener;
 	
@@ -59,6 +69,7 @@ public class FamilyMapFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mEventMarkers = new ArrayList<>();
 	}
 	
 	@Override
@@ -114,7 +125,26 @@ public class FamilyMapFragment extends Fragment {
 		getFragmentManager().beginTransaction()
 				.add(R.id.mapFragment, mMapFragment, MAP_FRAGMENT_TAG).commit();
 		
+		mMapFragment.getMapAsync(new OnMapReadyCallback() {
+			@Override
+			public void onMapReady(AmazonMap amazonMap) {
+				onMapLoad(amazonMap);
+			}
+		});
+		
 		return view;
+	}
+	
+	private void onMapLoad(AmazonMap amazonMap) {
+		Event[] events = UserInfo.get().getEvents();
+		Event event = events[0];
+		Double lat = Double.parseDouble(event.getLatitude()), lon = Double.parseDouble(event.getLongitude());
+		LatLng point = new LatLng(lat, lon);
+		MarkerOptions options = new MarkerOptions()
+				.position(point)
+				.title("Marker at: ")
+				.snippet(point.toString());
+		mEventMarkers.add(amazonMap.addMarker(options));
 	}
 	
 	private void onLogout() {
