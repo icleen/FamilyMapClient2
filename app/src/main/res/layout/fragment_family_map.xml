@@ -5,44 +5,61 @@
              tools:context="cs240.iainlee.familymapclient.FamilyMapFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="This is the family map fragment"/>
-
-        <Button
-            android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/logout_button"/>
+            android:text="This is the family map fragment"
+            android:layout_gravity="center_horizontal"/>
 
-        <Button
-            android:id="@+id/person_button"
+        <fragment
+            android:id="@+id/mapFragment"
+            android:layout_gravity="center"
+            android:layout_width="570dp"
+            android:layout_height="800dp"
+            class="com.amazon.geo.mapsv2.MapFragment" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To person class"/>
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="settings"/>
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout_button"/>
 
-        <Button
-            android:id="@+id/filter_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="filters"/>
+            <Button
+                android:id="@+id/person_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To person class"/>
 
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="search"/>
+            <Button
+                android:id="@+id/settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="settings"/>
+
+            <Button
+                android:id="@+id/filter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="filters"/>
+
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="search"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

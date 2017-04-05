@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FamilyMapClient2.iml" filepath="$PROJECT_DIR$/FamilyMapClient2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/amazon-maps-api-v2/amazon-maps-api-v2.iml" filepath="$PROJECT_DIR$/amazon-maps-api-v2/amazon-maps-api-v2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gson-2.8.0-sources/gson-2.8.0-sources.iml" filepath="$PROJECT_DIR$/gson-2.8.0-sources/gson-2.8.0-sources.iml" />
     </modules>
   </component>
 </project>

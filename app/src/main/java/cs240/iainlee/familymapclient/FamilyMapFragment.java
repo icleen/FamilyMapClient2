@@ -1,15 +1,18 @@
 package cs240.iainlee.familymapclient;
 
+import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.amazon.geo.mapsv2.MapFragment;
 
 
 /**
@@ -23,6 +26,9 @@ import android.widget.Button;
 public class FamilyMapFragment extends Fragment {
 	
 	private static final String TAG = "FamilyMapFrag";
+	
+	private MapFragment mMapFragment;
+	private static final String MAP_FRAGMENT_TAG = "mapfragment";
 	
 	private Button mLogoutButton;
 	private Button mToPerson;
@@ -104,6 +110,15 @@ public class FamilyMapFragment extends Fragment {
 				onChangeActivity(SearchActivity.class);
 			}
 		});
+		
+		mMapFragment = MapFragment.newInstance();
+
+		// Add the new fragment to the fragment manager. Note that
+		// fragment_container is the ID for the frame layout defined in
+		// programmatic_layout.xml
+//		getFragmentManager().beginTransaction()
+//				.add(R.id.mapFragment, mMapFragment, MAP_FRAGMENT_TAG).commit();
+		
 		return view;
 	}
 	
