@@ -298,13 +298,6 @@ public class FamilyMapFragment extends Fragment {
 			View v = inflater.inflate(R.layout.event_info_window, null);
 			Event event = mEventMarkers.get(marker);
 			addEventInfoWindow(event);
-//			String personId = event.getPersonId();
-//			Person person = UserInfo.get().getPerson(personId);
-//			String fName = person.getFirstName(), lName = person.getLastName();
-//			TextView name = (TextView) v.findViewById(R.id.event_window_name);
-//			name.setText(fName + " " + lName);
-//			TextView info = (TextView) v.findViewById(R.id.event_window_info);
-//			info.setText(event.getEventType() + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")");
 			return v;
 		}
 		

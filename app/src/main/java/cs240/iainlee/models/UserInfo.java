@@ -52,6 +52,9 @@ public class UserInfo {
 	}
 	
 	public Person getPerson(String id) {
+		if (id == null || id.isEmpty()) {
+			return null;
+		}
 		for (int i = 0; i < mPersons.length; i++) {
 			if (mPersons[i].getId().equals(id)) {
 				return mPersons[i];
@@ -61,6 +64,9 @@ public class UserInfo {
 	}
 	
 	public Event getEvent(String id) {
+		if (id == null || id.isEmpty()) {
+			return null;
+		}
 		for (int i = 0; i < mEvents.length; i++) {
 			if (mEvents[i].getPersonId().equals(id)) {
 				return mEvents[i];
@@ -79,21 +85,27 @@ public class UserInfo {
 		return events;
 	}
 	
-	public HashMap<Person, String> getRelatives(Person person) {
-		Person father = getPerson(person.getFather());
-		Person mother = getPerson(person.getMother());
-		Person spouse = getPerson(person.getSpouse());
-		HashMap<Person, String> relatives = new HashMap<>();
-		relatives.put(father, "father");
-		relatives.put(mother, "mother");
-		relatives.put(spouse, "spouse");
+	public List<Person> getChildren(Person person) {
+		if (person == null || !person.isValid()) {
+			return null;
+		}
+		ArrayList<Person> children = new ArrayList<>();
 		String id = person.getId();
-		for (int i = 0; i < mPersons.length; i++) {
-			if (mPersons[i].getFather().equals(id) || mPersons[i].getMother().equals(id)) {
-				relatives.put(mPersons[i], "child");
+		if (person.getGender().equals("m")) {
+			for (int i = 0; i < mPersons.length; i++) {
+				if (mPersons[i].getFather() != null && mPersons[i].getFather().equals(id)) {
+					children.add(mPersons[i]);
+				}
 			}
 		}
-		return relatives;
+		else {
+			for (int i = 0; i < mPersons.length; i++) {
+				if (mPersons[i].getMother() != null && mPersons[i].getMother().equals(id)) {
+					children.add(mPersons[i]);
+				}
+			}
+		}
+		return children;
 	}
 	
-}
+}// *************************** THE END *******************************

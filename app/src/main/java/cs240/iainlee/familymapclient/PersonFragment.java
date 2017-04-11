@@ -1,11 +1,13 @@
 package cs240.iainlee.familymapclient;
 
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cs240.iainlee.models.Event;
@@ -30,6 +33,7 @@ import cs240.iainlee.models.UserInfo;
 public class PersonFragment extends Fragment {
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM = "param";
+	private static final String TAG = "PersonFragment";
 	
 	private Drawable mEventDrawable;
 	private Drawable mMaleDrawable;
@@ -38,6 +42,7 @@ public class PersonFragment extends Fragment {
 	private RecyclerView mPersonRecycler;
 	private RecyclerView mEventRecycler;
 	private EventAdapter mEventAdapter;
+	private FamilyAdapter mFamilyAdapter;
 	
 	private Person mPerson;
 	
@@ -107,15 +112,43 @@ public class PersonFragment extends Fragment {
 	}
 	
 	private void updateUI() {
-		List<Event> events = UserInfo.get().getEventsById(mPerson.getId());
-		mEventAdapter = new EventAdapter(events);
-		mEventRecycler.setAdapter(mEventAdapter);
+		try {
+			List<Person> family = UserInfo.get().getChildren(mPerson);
+			List<String> relations = new ArrayList<>();
+			family.add(0, UserInfo.get().getPerson(mPerson.getFather()));
+//			Log.d(TAG, "father: " + mPerson.getFather());
+			relations.add(0, "Father");
+	
+			family.add(1, UserInfo.get().getPerson(mPerson.getMother()));
+//			Log.d(TAG, "mother: " + mPerson.getMother());
+			relations.add(1, "Mother");
+	
+			family.add(2, UserInfo.get().getPerson(mPerson.getSpouse()));
+//			Log.d(TAG, "spouse: " + mPerson.getSpouse());
+			relations.add(2, "Spouse");
+			
+			for (int i = 0; i < family.size(); i++) {
+				relations.add("Child");
+			}
+			assert(family.size() == relations.size());
+			
+			mFamilyAdapter = new FamilyAdapter(family, relations);
+			mPersonRecycler.setAdapter(mFamilyAdapter);
+			
+			List<Event> events = UserInfo.get().getEventsById(mPerson.getId());
+			mEventAdapter = new EventAdapter(events);
+			mEventRecycler.setAdapter(mEventAdapter);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
+		}
 	}
 	
-	private class FamilyHolder extends RecyclerView.ViewHolder {
+	
+	
+	private class FamilyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 		
-		private Person mPerson;
-		private String mRelationship;
+		private Person mFamilyPerson;
 		
 		public TextView mPersonInfo;
 		public TextView mRelationshipInfo;
@@ -123,24 +156,45 @@ public class PersonFragment extends Fragment {
 		
 		public FamilyHolder(View view) {
 			super(view);
+			view.setOnClickListener(this);
 			
 			mPersonInfo = (TextView) view.findViewById(R.id.list_view_info1);
 			mRelationshipInfo = (TextView) view.findViewById(R.id.list_view_info2);
 			mPersonImage = (ImageView) view.findViewById(R.id.list_view_image);
 		}
 		
-		public void bindPerson(Person person, String relationship) {
-			mPerson = person;
-			mRelationship = relationship;
-			
-			mPersonInfo.setText(mPerson.getFirstName() + " " +mPerson.getLastName());
-			mRelationshipInfo.setText(relationship);
-			
-			if (person.getGender().equals("m")) {
-				mPersonImage.setImageDrawable(mMaleDrawable);
+		public void bindPerson(Person person, String relation) {
+			mFamilyPerson = person;
+			if (mFamilyPerson != null) {
+				mPersonInfo.setText(mFamilyPerson.getFirstName() + " " + mFamilyPerson.getLastName());
+				
+				if (person.getGender().equals("m")) {
+					mPersonImage.setImageDrawable(mMaleDrawable);
+				}else {
+					mPersonImage.setImageDrawable(mFemaleDrawable);
+				}
 			}else {
-				mPersonImage.setImageDrawable(mFemaleDrawable);
+				mPersonInfo.setText("NA");
+				if (relation.equals("Father")) {
+					mPersonImage.setImageDrawable(mMaleDrawable);
+				}
+				else if (relation.equals("Mother")) {
+					mPersonImage.setImageDrawable(mFemaleDrawable);
+				}
+				else if (mPerson.getGender().equals("m")) { // it must be a null spouse so the gender depends on user gender
+					mPersonImage.setImageDrawable(mFemaleDrawable);
+				}
+				else {
+					mPersonImage.setImageDrawable(mMaleDrawable);
+				}
 			}
+			mRelationshipInfo.setText(relation);
+		}
+		
+		@Override
+		public void onClick(View view) {
+			Intent intent = null;
+			startActivity(intent);
 		}
 		
 	}
@@ -148,9 +202,11 @@ public class PersonFragment extends Fragment {
 	private class FamilyAdapter extends RecyclerView.Adapter<FamilyHolder> {
 		
 		private List<Person> mPersonList;
+		private List<String> mRelations;
 		
-		public FamilyAdapter(List<Person> personList) {
+		public FamilyAdapter(List<Person> personList, List<String> relations) {
 			mPersonList = personList;
+			mRelations = relations;
 		}
 		
 		public FamilyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -160,8 +216,7 @@ public class PersonFragment extends Fragment {
 		}
 		
 		public void onBindViewHolder(FamilyHolder holder, int position) {
-			Person person = mPersonList.get(position);
-			holder.bindPerson(person, null);
+			holder.bindPerson(mPersonList.get(position), mRelations.get(position));
 		}
 		
 		public int getItemCount() {
@@ -170,7 +225,7 @@ public class PersonFragment extends Fragment {
 		
 	}
 	
-	private class EventHolder extends RecyclerView.ViewHolder {
+	private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 		
 		public TextView mEventInfo;
 		public TextView mEventPerson;
@@ -180,6 +235,7 @@ public class PersonFragment extends Fragment {
 		
 		public EventHolder(View view) {
 			super(view);
+			view.setOnClickListener(this);
 			
 			mEventInfo = (TextView) view.findViewById(R.id.list_view_info1);
 			mEventPerson = (TextView) view.findViewById(R.id.list_view_info2);
@@ -188,12 +244,17 @@ public class PersonFragment extends Fragment {
 		
 		public void bindEvent(Event event) {
 			mEvent = event;
-			mEventInfo.setText(event.getEventType() + ": "
-					+ event.getCity() + ", " + event.getCountry()
-					+ " (" + event.getYear() + ")");
+			mEventInfo.setText(mEvent.getEventType() + ": "
+					+ mEvent.getCity() + ", " + mEvent.getCountry()
+					+ " (" + mEvent.getYear() + ")");
 			mEventPerson.setText(mPerson.getFirstName() + " " + mPerson.getLastName());
 			
 			mEventImage.setImageDrawable(mEventDrawable);
+		}
+		
+		@Override
+		public void onClick(View view) {
+			
 		}
 		
 	}
