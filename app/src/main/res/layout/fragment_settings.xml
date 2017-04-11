@@ -1,0 +1,204 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="cs240.iainlee.familymapclient.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/life_story_lines_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp">
+
+                <Spinner
+                    android:id="@+id/life_color_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="40dp"/>
+
+                <Switch
+                    android:id="@+id/life_story_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/off_button"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/life_story_lines_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/family_tree_lines_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp">
+
+                <Spinner
+                    android:id="@+id/family_color_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="40dp"/>
+
+                <Switch
+                    android:id="@+id/family_tree_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/off_button"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/family_tree_lines_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spouse_lines_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp">
+
+                <Spinner
+                    android:id="@+id/spouse_color_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="40dp"/>
+
+                <Switch
+                    android:id="@+id/spouse_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/off_button"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/spouse_lines_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_type_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <Spinner
+                android:id="@+id/map_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="40dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/map_type_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:id="@+id/settings_resync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/resync_title"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/resync_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:id="@+id/settings_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout_title"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout_descripter"
+            style="?android:listSeparatorTextViewStyle"/>
+
+    </LinearLayout>
+
+
+</FrameLayout>

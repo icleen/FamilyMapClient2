@@ -193,7 +193,7 @@ public class PersonFragment extends Fragment {
 		
 		@Override
 		public void onClick(View view) {
-			Intent intent = null;
+			Intent intent = PersonActivity.newIntent(getContext(), mFamilyPerson.getId());
 			startActivity(intent);
 		}
 		
@@ -254,7 +254,13 @@ public class PersonFragment extends Fragment {
 		
 		@Override
 		public void onClick(View view) {
-			
+			try {
+				Intent intent = MapActivity.newIntent(getContext(), mEvent.getEventId());
+				startActivity(intent);
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage());
+				Log.e(TAG, "" + e.getStackTrace());
+			}
 		}
 		
 	}

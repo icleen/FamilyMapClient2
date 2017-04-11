@@ -207,11 +207,6 @@ public class LoginFragment extends Fragment {
 		});
 		
 		mRadioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
-		
-//		mMale = (RadioButton) view.findViewById(R.id.male_radio);
-//
-//		mFemale = (RadioButton) view.findViewById(R.id.female_radio);
-		
 		mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -233,7 +228,13 @@ public class LoginFragment extends Fragment {
 			@Override
 			public void onClick(View view) {
 				Log.d(TAG, "Now loging in");
-				new loginServerTask().execute();
+				try {
+					new loginServerTask().execute();
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+					Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		});
 		
@@ -242,7 +243,12 @@ public class LoginFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "Now registering");
-				new registerInServerTask().execute();
+				try {
+					new registerInServerTask().execute();
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+					Toast.makeText(getActivity(), "Register Failed", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		

@@ -66,6 +66,7 @@ public class FamilyMapFragment extends Fragment {
 	private View mEventInfoWindow;
 	
 	private Person mCurrentPerson;
+	private Event mCurrentEvent;
 	
 	private HashMap<Marker, Event> mEventMarkers;
 	
@@ -80,9 +81,19 @@ public class FamilyMapFragment extends Fragment {
 	 * this fragment using the provided parameters.
 	 * @return A new instance of fragment FamilyMapFragment.
 	 */
-	// TODO: Rename and change types and number of parameters
 	public static FamilyMapFragment newInstance() {
 		return new FamilyMapFragment();
+	}
+	
+	/**
+	 * Use this factory method to create a new instance of
+	 * this fragment using the provided parameters.
+	 * @return A new instance of fragment FamilyMapFragment.
+	 */
+	public static FamilyMapFragment newInstance(String eventId) {
+		FamilyMapFragment temp = new FamilyMapFragment();
+		temp.addEventInfoWindow(UserInfo.get().getEvent(eventId));
+		return temp;
 	}
 	
 	@Override
@@ -108,7 +119,13 @@ public class FamilyMapFragment extends Fragment {
 		mToSettings.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onChangeActivity(SettingsActivity.class);
+				if (mCurrentEvent != null) {
+					Intent intent = SettingsActivity.newIntent(getContext(), mCurrentEvent.getEventId());
+					startActivity(intent);
+				}else {
+					Intent intent = SettingsActivity.newIntent(getContext(), null);
+					startActivity(intent);
+				}
 			}
 		});
 		
@@ -167,25 +184,29 @@ public class FamilyMapFragment extends Fragment {
 		Event event = null;
 		Double lat = null, lon = null;
 		MarkerOptions options = null;
-		for (int i = 0; i < events.length; i++) {
-			try {
-				event = events[i];
-				if (!event.getLatitude().isEmpty()) {
-					lat = Double.parseDouble(event.getLatitude());
-					lon = Double.parseDouble(event.getLongitude());
-					LatLng point = new LatLng(lat, lon);
-					options = new MarkerOptions()
-							.position(point)
-							.title("Event: " + event.getEventType() + " at: ")
-							.snippet(point.toString())
-							.icon(BitmapDescriptorFactory.defaultMarker(eventColor(event)));
-					
-					mEventMarkers.put(amazonMap.addMarker(options), event);
-				}
-			} catch (NullPointerException e) {
+		if (events != null) {
+			for (int i = 0; i < events.length; i++) {
+				try {
+					event = events[i];
+					if (!event.getLatitude().isEmpty()) {
+						lat = Double.parseDouble(event.getLatitude());
+						lon = Double.parseDouble(event.getLongitude());
+						LatLng point = new LatLng(lat, lon);
+						options = new MarkerOptions()
+								.position(point)
+								.title("Event: " + event.getEventType() + " at: ")
+								.snippet(point.toString())
+								.icon(BitmapDescriptorFactory.defaultMarker(eventColor(event)));
+						
+						mEventMarkers.put(amazonMap.addMarker(options), event);
+					}
+				} catch (NullPointerException e) {
 //				Log.e(TAG, "this event doesn't have coordinates (ie hasn't happened yet)");
 //				Log.e(TAG, event.toString());
+				}
 			}
+		}else {
+			Log.e(TAG, "there are no events in the UserInfo class: " + events);
 		}
 		
 		amazonMap.setInfoWindowAdapter(new EventInfoWindow());
@@ -207,6 +228,7 @@ public class FamilyMapFragment extends Fragment {
 			mEventImage.setImageDrawable(genderIcon);
 		}
 		mCurrentPerson = person;
+		mCurrentEvent = event;
 		Log.d(TAG, "There should be stuff in the tag");
 	}
 	
