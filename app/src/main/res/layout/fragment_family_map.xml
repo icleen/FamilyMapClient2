@@ -10,19 +10,6 @@
         android:orientation="vertical"
         android:layout_gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="This is the family map fragment"
-            android:layout_gravity="center_horizontal"/>
-
-        <fragment
-            android:id="@+id/mapFragment"
-            android:layout_gravity="center"
-            android:layout_width="570dp"
-            android:layout_height="800dp"
-            class="com.amazon.geo.mapsv2.MapFragment" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,12 +21,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/logout_button"/>
-
-            <Button
-                android:id="@+id/person_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="To person class"/>
 
             <Button
                 android:id="@+id/settings_button"
@@ -60,6 +41,52 @@
                 android:text="search"/>
 
         </LinearLayout>
+
+        <fragment
+            android:id="@+id/mapFragment"
+            android:layout_gravity="center"
+            android:layout_width="570dp"
+            android:layout_height="780dp"
+            class="com.amazon.geo.mapsv2.MapFragment" />
+
+        <LinearLayout
+            android:id="@+id/event_info_window"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/event_window_image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2">
+
+                <TextView
+                    android:id="@+id/event_window_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_info_window_default_name"
+                    android:textSize="22dp"/>
+
+                <TextView
+                    android:id="@+id/event_window_info2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_info_window_default_info"
+                    android:textSize="22dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

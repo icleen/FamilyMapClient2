@@ -6,9 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import cs240.iainlee.models.Event;
-import cs240.iainlee.models.Person;
-
 public class MainActivity extends FragmentActivity implements LoginFragment.OnLoginListener, FamilyMapFragment.OnLogoutListener {
 	
 	private static final String TAG = "mainActivity";

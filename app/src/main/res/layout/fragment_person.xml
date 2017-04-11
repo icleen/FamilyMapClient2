@@ -1,0 +1,78 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="cs240.iainlee.familymapclient.PersonFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/person_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_firstName"
+            android:textSize="22dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_firstName"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:id="@+id/person_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_lastName"
+            android:textSize="22dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_lastName"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:id="@+id/person_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_gender"
+            android:textSize="22dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_gender"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Life Events"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/event_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Family"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/person_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</FrameLayout>

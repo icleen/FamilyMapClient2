@@ -1,57 +1,46 @@
 package cs240.iainlee.familymapclient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import cs240.iainlee.models.Person;
+import cs240.iainlee.models.UserInfo;
+
 public class PersonActivity extends AppCompatActivity {
 	
 	private static final String TAG = "personActivity";
+	private static final String EXTRA_PERSONID = "this is the key for the person id";
 	
-	private Button mBackButton;
-	private Button mTopButton;
-	private Button mMapButton;
+	private Person mPerson;
+	
+	public static Intent newIntent(Context packageContext, String personId) {
+		Intent intent = new Intent(packageContext, PersonActivity.class);
+		intent.putExtra(EXTRA_PERSONID, personId);
+		return intent;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_person);
 		
-		mBackButton = (Button) findViewById(R.id.person_back);
-		mBackButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onReturnToParent();
-			}
-		});
+		String personId = getIntent().getStringExtra(EXTRA_PERSONID);
 		
-		mTopButton = (Button) findViewById(R.id.person_top);
-		mTopButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onToTop();
-			}
-		});
+		FragmentManager fm = getSupportFragmentManager();
+		Fragment fragment = fm.findFragmentById(R.id.person_fragment_container);
 		
-		mMapButton = (Button) findViewById(R.id.person_map);
-		mMapButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onGoToMap();
-			}
-		});
-		
-	}
-	
-	private void onReturnToParent() {
-		Log.d(TAG, "to parent");
-	}
-	
-	private void onToTop() {
-		Log.d(TAG, "to top");
+		if (fragment == null) {
+			fragment = PersonFragment.newInstance(personId);
+			fm.beginTransaction().add(R.id.person_fragment_container, fragment).commit();
+			Log.d(TAG, "Loaded the person fragment");
+		}
 	}
 	
 	private void onGoToMap() {

@@ -31,4 +31,10 @@
     <string name="action_sign_in">Sign In</string>
     <string name="action_register">Register</string>
 
+    <string name="event_info_title">Life Events</string>
+    <string name="family_info_title">Family</string>
+
+    <string name="event_info_window_default_name">Click on an marker</string>
+    <string name="event_info_window_default_info">to see event details</string>
+
 </resources>
