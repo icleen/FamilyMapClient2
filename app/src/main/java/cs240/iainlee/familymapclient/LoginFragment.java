@@ -169,8 +169,11 @@ public class LoginFragment extends Fragment {
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		mLoginInfo.setServerHost("192.168.0.109");
+		mLoginInfo.setServerHost("192.168.2.26");
+//		mLoginInfo.setServerHost("172.16.55.1");
+//		mLoginInfo.setServerHost("10.24.67.214");
 		mServerHost = (EditText) view.findViewById(R.id.server_host);
+		mServerHost.setText(mLoginInfo.getServerHost());
 		mServerHost.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -228,6 +231,7 @@ public class LoginFragment extends Fragment {
 			@Override
 			public void onClick(View view) {
 				Log.d(TAG, "Now loging in");
+				Toast.makeText(getActivity(), "Attempting to log in", Toast.LENGTH_SHORT).show();
 				try {
 					new loginServerTask().execute();
 				} catch (Exception e) {
@@ -260,6 +264,7 @@ public class LoginFragment extends Fragment {
 	
 	public void onLogin() {
 		if (mListener != null) {
+			UserInfo.get().setLoginInfo(mLoginInfo);
 			mListener.onLogin();
 		}
 	}

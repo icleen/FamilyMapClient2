@@ -5,31 +5,41 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazon.geo.mapsv2.AmazonMap;
 import com.amazon.geo.mapsv2.AmazonMapOptions;
+import com.amazon.geo.mapsv2.CameraUpdateFactory;
 import com.amazon.geo.mapsv2.OnMapReadyCallback;
 import com.amazon.geo.mapsv2.SupportMapFragment;
 import com.amazon.geo.mapsv2.model.BitmapDescriptorFactory;
 import com.amazon.geo.mapsv2.model.LatLng;
 import com.amazon.geo.mapsv2.model.Marker;
 import com.amazon.geo.mapsv2.model.MarkerOptions;
-
-import java.util.HashMap;
-
-import cs240.iainlee.models.Event;
-import cs240.iainlee.models.Person;
-import cs240.iainlee.models.UserInfo;
-
+import com.amazon.geo.mapsv2.model.Polyline;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import cs240.iainlee.models.Event;
+import cs240.iainlee.models.MapSettings;
+import cs240.iainlee.models.Person;
+import cs240.iainlee.models.UserInfo;
+import cs240.iainlee.support.EventColors;
+import cs240.iainlee.support.Filterer;
+import cs240.iainlee.support.LineDrawer;
 
 
 /**
@@ -47,18 +57,14 @@ public class FamilyMapFragment extends Fragment {
 	private SupportMapFragment mMapFragment;
 	private static final String MAP_FRAGMENT_TAG = "mapfragment";
 	
-	private static final String ARG_PARAM1 = "people";
-	private static final String ARG_PARAM2 = "events";
+	private static final int REQUEST_CODE_FILTER = 0;
+	private static final int REQUEST_CODE_SETTINGS = 2;
+	private static final int REQUEST_CODE_SEARCH = 4;
 	
-	private static final float BIRTH_COLOR = 0;
-	private static final float BAPTISM_COLOR = 100;
-	private static final float MARRIAGE_COLOR = 200;
-	private static final float DEATH_COLOR = 300;
+	private static final String ARG_PARAM1 = "eventId";
 	
-	private Button mLogoutButton;
-	private Button mToSettings;
-	private Button mToFilters;
-	private Button mToSearch;
+	private static EventColors sEventColors = new EventColors();
+	private static LineDrawer sLineDrawer = new LineDrawer();
 	
 	private ImageView mEventImage;
 	private TextView mEventName;
@@ -66,23 +72,17 @@ public class FamilyMapFragment extends Fragment {
 	private View mEventInfoWindow;
 	
 	private Person mCurrentPerson;
-	private Event mCurrentEvent;
+	private static Event mCurrentEvent;
 	
 	private HashMap<Marker, Event> mEventMarkers;
+	private List<Polyline> mPolylines = new ArrayList<Polyline>();
 	
 	private OnLogoutListener mListener;
 	
-	public FamilyMapFragment() {
-		// Required empty public constructor
-	}
+	private String[] mEventTypes;
+	private boolean[] mFilterValues;
 	
-	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-	 * @return A new instance of fragment FamilyMapFragment.
-	 */
-	public static FamilyMapFragment newInstance() {
-		return new FamilyMapFragment();
+	public FamilyMapFragment() { // Required empty public constructor
 	}
 	
 	/**
@@ -91,15 +91,30 @@ public class FamilyMapFragment extends Fragment {
 	 * @return A new instance of fragment FamilyMapFragment.
 	 */
 	public static FamilyMapFragment newInstance(String eventId) {
-		FamilyMapFragment temp = new FamilyMapFragment();
-		temp.addEventInfoWindow(UserInfo.get().getEvent(eventId));
-		return temp;
+		FamilyMapFragment fragment = new FamilyMapFragment();
+		if (eventId != null) {
+			Bundle args = new Bundle();
+			args.putString(ARG_PARAM1, eventId);
+			fragment.setArguments(args);
+		}
+		return fragment;
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		if (getActivity().getClass() == MapActivity.class) {
+			( (AppCompatActivity) getActivity() ).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 		mEventMarkers = new HashMap<>();
+		String eventId = null;
+		if (getArguments() != null) {
+			Log.d(TAG, "setting the current Event");
+			eventId = getArguments().getString(ARG_PARAM1);
+			Log.d(TAG, "event is: " + eventId + ", " + UserInfo.get().getEvent(eventId));
+			mCurrentEvent = UserInfo.get().getEvent(eventId);
+		}
 	}
 	
 	@Override
@@ -107,43 +122,8 @@ public class FamilyMapFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_family_map, container, false);
-		mLogoutButton = (Button) view.findViewById(R.id.logout_button);
-		mLogoutButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onLogout();
-			}
-		});
 		
-		mToSettings = (Button) view.findViewById(R.id.settings_button);
-		mToSettings.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mCurrentEvent != null) {
-					Intent intent = SettingsActivity.newIntent(getContext(), mCurrentEvent.getEventId());
-					startActivity(intent);
-				}else {
-					Intent intent = SettingsActivity.newIntent(getContext(), null);
-					startActivity(intent);
-				}
-			}
-		});
-		
-		mToFilters = (Button) view.findViewById(R.id.filter_button);
-		mToFilters.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onChangeActivity(FilterActivity.class);
-			}
-		});
-		
-		mToSearch = (Button) view.findViewById(R.id.search_button);
-		mToSearch.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onChangeActivity(SearchActivity.class);
-			}
-		});
+		mEventTypes = UserInfo.get().getEventTypes();
 		
 		mEventImage = (ImageView) view.findViewById(R.id.event_window_image2);
 		Drawable andriodIcon = new IconDrawable(getContext(), Iconify.IconValue.fa_map_marker).
@@ -162,6 +142,16 @@ public class FamilyMapFragment extends Fragment {
 		
 		AmazonMapOptions opt = new AmazonMapOptions();
 		opt.mapToolbarEnabled(false);
+		if (MapSettings.get().getMapType().equals("Hybrid")) {
+			Log.d(TAG, "mapType is Hybrid");
+			opt.mapType(AmazonMap.MAP_TYPE_HYBRID);
+		}else if (MapSettings.get().getMapType().equals("Satellite")) {
+			Log.d(TAG, "mapType is Satellite");
+			opt.mapType(AmazonMap.MAP_TYPE_SATELLITE);
+		}else if (MapSettings.get().getMapType().equals("Terrain")) {
+			Log.d(TAG, "mapType is Terrain");
+			opt.mapType(AmazonMap.MAP_TYPE_TERRAIN);
+		}
 		mMapFragment = SupportMapFragment.newInstance(opt);
 		// Add the new fragment to the fragment manager. Note that
 		// fragment_container is the ID for the frame layout defined in
@@ -169,20 +159,105 @@ public class FamilyMapFragment extends Fragment {
 		getFragmentManager().beginTransaction()
 				.add(R.id.mapFragment, mMapFragment, MAP_FRAGMENT_TAG).commit();
 		
+		if (mCurrentEvent != null) {
+			Log.d(TAG, "putting in the event window");
+			addEventInfoWindow(mCurrentEvent);
+		}
+		
+		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d(TAG, "resuming");
 		mMapFragment.getMapAsync(new OnMapReadyCallback() {
 			@Override
 			public void onMapReady(AmazonMap amazonMap) {
 				onMapLoad(amazonMap);
 			}
 		});
-		
-		return view;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBooleanArray(TAG, mFilterValues);
+		Log.d(TAG, "put the filterValues");
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		Log.d(TAG, "activities: " + getActivity().getClass() + " " + MainActivity.class);
+		if (getActivity().getClass() == MainActivity.class) {
+			inflater.inflate(R.menu.map_toolbar, menu);
+			
+			MenuItem item = null;
+			Drawable icon = null;
+			item = menu.findItem(R.id.menu_search);
+			icon = new IconDrawable(getContext(), Iconify.IconValue.fa_search).sizeDp(20);
+			item.setIcon(icon);
+			
+			item = menu.findItem(R.id.menu_filters);
+			icon = new IconDrawable(getContext(), Iconify.IconValue.fa_filter).sizeDp(20);
+			item.setIcon(icon);
+			
+			item = menu.findItem(R.id.menu_settings);
+			icon = new IconDrawable(getContext(), Iconify.IconValue.fa_gear).sizeDp(20);
+			item.setIcon(icon);
+		}else {
+			inflater.inflate(R.menu.person_toolbar, menu);
+			
+			MenuItem item = null;
+			Drawable icon = null;
+			item = menu.findItem(R.id.go_to_top);
+			icon = new IconDrawable(getContext(), Iconify.IconValue.fa_angle_double_up).sizeDp(40);
+			item.setIcon(icon);
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+		switch (item.getItemId()) {
+			case R.id.menu_search:
+				intent = SearchActivity.newIntent(getContext());
+				startActivity(intent);
+				return true;
+			case R.id.menu_filters:
+				intent = FilterActivity.newIntent(getContext(), mEventTypes, mFilterValues);
+				startActivity(intent);
+				return true;
+			case R.id.menu_settings:
+				intent = SettingsActivity.newIntent(getContext(), null);
+				startActivity(intent);
+				return true;
+			case R.id.go_to_top:
+				Log.d(TAG, "Going to the top");
+				intent = new Intent(getActivity(), MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(intent);
+				return true;
+			case android.R.id.home:
+				getActivity().finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	private void onMapLoad(AmazonMap amazonMap) {
-		Event[] events = UserInfo.get().getEvents();
+		amazonMap.clear();
+		
+		if (mCurrentEvent != null) {
+			LatLng ll = new LatLng(Double.parseDouble(mCurrentEvent.getLatitude()), Double.parseDouble(mCurrentEvent.getLongitude()));
+			amazonMap.animateCamera( CameraUpdateFactory.newLatLng( ll ) );
+		}
+		
+		Event[] events = Filterer.getEvents(mFilterValues, mEventTypes);
 		Event event = null;
-		Double lat = null, lon = null;
+		Double lat, lon;
 		MarkerOptions options = null;
 		if (events != null) {
 			for (int i = 0; i < events.length; i++) {
@@ -196,7 +271,7 @@ public class FamilyMapFragment extends Fragment {
 								.position(point)
 								.title("Event: " + event.getEventType() + " at: ")
 								.snippet(point.toString())
-								.icon(BitmapDescriptorFactory.defaultMarker(eventColor(event)));
+								.icon(BitmapDescriptorFactory.defaultMarker(sEventColors.eventColor(event)));
 						
 						mEventMarkers.put(amazonMap.addMarker(options), event);
 					}
@@ -209,12 +284,24 @@ public class FamilyMapFragment extends Fragment {
 			Log.e(TAG, "there are no events in the UserInfo class: " + events);
 		}
 		
+		setLines(amazonMap, events);
+		
 		amazonMap.setInfoWindowAdapter(new EventInfoWindow());
+	}
+	
+	private void setLines(AmazonMap amazonMap, Event[] events) {
+		MapSettings settings = MapSettings.get();
+		Log.d(TAG, "mapType: " + settings.getMapType());
+		mPolylines = sLineDrawer.setLines(amazonMap, events, mCurrentEvent, sEventColors);
 	}
 	
 	private void addEventInfoWindow(Event event) {
 		String personId = event.getPersonId();
 		Person person = UserInfo.get().getPerson(personId);
+		if (person == null) {
+			Log.e(TAG, "497: person was null: " + event.getPersonId());
+			return;
+		}
 		String fName = person.getFirstName(), lName = person.getLastName();
 		mEventName.setText(fName + " " + lName);
 		mEventInfo.setText(event.getEventType() + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")");
@@ -229,28 +316,13 @@ public class FamilyMapFragment extends Fragment {
 		}
 		mCurrentPerson = person;
 		mCurrentEvent = event;
-		Log.d(TAG, "There should be stuff in the tag");
-	}
-	
-	private float eventColor(Event event) {
-		if (event.getEventType().equals("birth")) {
-//			Log.d(TAG, "birth color");
-			return BIRTH_COLOR;
-		}
-		else if (event.getEventType().equals("baptism")) {
-//			Log.d(TAG, "baptism color");
-			return BAPTISM_COLOR;
-		}
-		else if (event.getEventType().equals("marriage")) {
-//			Log.d(TAG, "marriage color");
-			return MARRIAGE_COLOR;
-		}
-		else if (event.getEventType().equals("death")) {
-//			Log.d(TAG, "death color");
-			return DEATH_COLOR;
-		}
-		Log.e(TAG, "What eventType is this? " + event.getEventType());
-		return 0;
+		mMapFragment.getMapAsync(new OnMapReadyCallback() {
+			@Override
+			public void onMapReady(AmazonMap amazonMap) {
+				setLines(amazonMap, Filterer.getEvents(mFilterValues, mEventTypes));
+			}
+		});
+//		Log.d(TAG, "There should be stuff in the tag");
 	}
 	
 	private void onClickEvent() {
@@ -260,31 +332,13 @@ public class FamilyMapFragment extends Fragment {
 		}
 	}
 	
-	private void onLogout() {
-		if (mListener != null) {
-			mListener.onLogout();
-		}
-	}
-	
-	private void onChangeActivity(Class k) {
-		try {
-			Log.d(TAG, "to " + k.getSimpleName());
-			Intent intent = new Intent(getActivity(), k);
-			startActivity(intent);
-		} catch (ClassCastException e) {
-			e.printStackTrace();
-			Log.e(TAG, e.getMessage());
-		}
-	}
-	
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		if (context instanceof OnLogoutListener) {
 			mListener = (OnLogoutListener) context;
 		} else {
-			throw new RuntimeException(context.toString()
-					+ " must implement OnLogoutListener");
+			throw new RuntimeException(context.toString() + " must implement OnLogoutListener");
 		}
 	}
 	

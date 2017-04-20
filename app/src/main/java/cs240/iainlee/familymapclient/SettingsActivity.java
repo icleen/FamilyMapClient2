@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-public class SettingsActivity extends FragmentActivity  {
+public class SettingsActivity extends AppCompatActivity {
 	
 	private static final String TAG = "SettingsActivity";
 	private static final String EXTRA_EVENTID = "this is the key for the event id";

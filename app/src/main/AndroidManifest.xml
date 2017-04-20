@@ -21,17 +21,21 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".PersonActivity">
+        <activity
+            android:name=".PersonActivity">
         </activity>
-        <activity android:name=".FilterActivity">
+        <activity android:name=".FilterActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".SearchActivity">
+        <activity android:name=".SearchActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity android:name=".MapActivity">
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

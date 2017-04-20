@@ -6,25 +6,36 @@ package cs240.iainlee.models;
 
 public class MapSettings {
 	
-//	private static MapSettings SINGLETON;
-//
-//	private MapSettings() {
-//	}
-//
-//	public static MapSettings get() {
-//		if (SINGLETON == null) {
-//			SINGLETON = new MapSettings();
-//		}
-//		return SINGLETON;
-//	}
+	private static MapSettings SINGLETON;
+
+	private MapSettings() {
+		mMapType = "Normal";
+		mMapTypePos = 0;
+		mSpouseColor = "green";
+		mLifeColorPos = 0;
+		mFamilyColor = "green";
+		mFamilyColorPos = 0;
+		mLifeColor = "green";
+	}
+
+	public static MapSettings get() {
+		if (SINGLETON == null) {
+			SINGLETON = new MapSettings();
+		}
+		return SINGLETON;
+	}
 	
 	private boolean mLifeLines;
-	private int mLifeColor;
+	private CharSequence mLifeColor;
+	private int mLifeColorPos;
 	private boolean mFamilyLines;
-	private int mFamilyColor;
+	private CharSequence mFamilyColor;
+	private int mFamilyColorPos;
 	private boolean mSpouseLines;
-	private int mSpouseColor;
-	private int mMapType;
+	private CharSequence mSpouseColor;
+	private int mSpouseColorPos;
+	private CharSequence mMapType;
+	private int mMapTypePos;
 	private boolean mResync;
 	private boolean mLogout;
 	
@@ -53,11 +64,11 @@ public class MapSettings {
 		mSpouseLines = spouseLines;
 	}
 	
-	public int getMapType() {
+	public CharSequence getMapType() {
 		return mMapType;
 	}
 	
-	public void setMapType(int mapType) {
+	public void setMapType(CharSequence mapType) {
 		mMapType = mapType;
 	}
 	
@@ -77,27 +88,67 @@ public class MapSettings {
 		mLogout = logout;
 	}
 	
-	public int getLifeColor() {
+	public CharSequence getLifeColor() {
 		return mLifeColor;
 	}
 	
-	public void setLifeColor(int lifeColor) {
+	public void setLifeColor(CharSequence lifeColor) {
 		mLifeColor = lifeColor;
 	}
 	
-	public int getFamilyColor() {
+	public CharSequence getFamilyColor() {
 		return mFamilyColor;
 	}
 	
-	public void setFamilyColor(int familyColor) {
+	public void setFamilyColor(CharSequence familyColor) {
 		mFamilyColor = familyColor;
 	}
 	
-	public int getSpouseColor() {
+	public CharSequence getSpouseColor() {
 		return mSpouseColor;
 	}
 	
-	public void setSpouseColor(int spouseColor) {
+	public void setSpouseColor(CharSequence spouseColor) {
 		mSpouseColor = spouseColor;
+	}
+	
+	public boolean hasLines() {
+		return (mLifeLines || mFamilyLines || mSpouseLines);
+	}
+	
+	public int getLifeColorPos() {
+		return mLifeColorPos;
+	}
+	
+	public void setLifeColorPos(int lifeColorPos) {
+		mLifeColorPos = lifeColorPos;
+	}
+	
+	public int getFamilyColorPos() {
+		return mFamilyColorPos;
+	}
+	
+	public void setFamilyColorPos(int familyColorPos) {
+		mFamilyColorPos = familyColorPos;
+	}
+	
+	public int getSpouseColorPos() {
+		return mSpouseColorPos;
+	}
+	
+	public void setSpouseColorPos(int spouseColorPos) {
+		mSpouseColorPos = spouseColorPos;
+	}
+	
+	public int getMapTypePos() {
+		return mMapTypePos;
+	}
+	
+	public void setMapTypePos(int mapTypePos) {
+		mMapTypePos = mapTypePos;
+	}
+	
+	public static void clear() {
+		SINGLETON = null;
 	}
 }

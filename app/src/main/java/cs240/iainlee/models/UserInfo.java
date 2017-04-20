@@ -1,5 +1,7 @@
 package cs240.iainlee.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +12,16 @@ import java.util.List;
 
 public class UserInfo {
 	
+	private static final String TAG = "UserInfo";
+	
 	private static UserInfo SINGLETON;
 	
 	Person[] mPersons;
 	Event[] mEvents;
 	
 	Person mUser;
+	
+	LoginInfo mLoginInfo;
 	
 	private UserInfo() {
 	}
@@ -25,6 +31,14 @@ public class UserInfo {
 			SINGLETON = new UserInfo();
 		}
 		return SINGLETON;
+	}
+	
+	public void setLoginInfo(LoginInfo info) {
+		mLoginInfo = info;
+	}
+	
+	public LoginInfo getLoginInfo() {
+		return mLoginInfo;
 	}
 	
 	public Person[] getPersons() {
@@ -52,7 +66,7 @@ public class UserInfo {
 	}
 	
 	public Person getPerson(String id) {
-		if (id == null || id.isEmpty()) {
+		if (id == null || id.isEmpty() || mPersons == null) {
 			return null;
 		}
 		for (int i = 0; i < mPersons.length; i++) {
@@ -64,11 +78,11 @@ public class UserInfo {
 	}
 	
 	public Event getEvent(String id) {
-		if (id == null || id.isEmpty()) {
+		if (id == null || id.isEmpty() || mEvents == null) {
 			return null;
 		}
 		for (int i = 0; i < mEvents.length; i++) {
-			if (mEvents[i].getPersonId().equals(id)) {
+			if (mEvents[i].getEventId().equals(id)) {
 				return mEvents[i];
 			}
 		}
@@ -106,6 +120,48 @@ public class UserInfo {
 			}
 		}
 		return children;
+	}
+	
+	public Event getOldestEvent(String personId) {
+		List<Event> events = getEventsById(personId);
+		Event oldest = null;
+		String year = null;
+		int number = 0;
+		int previous = 2020;
+		for (Event e : events) {
+			if (e.getYear() != null) {
+				year = e.getYear();
+				number = Integer.parseInt(year);
+				if (number < previous) {
+					previous = number;
+					oldest = e;
+				}
+			}
+		}
+		return oldest;
+	}
+	
+	public String[] getEventTypes() {
+		if (mEvents == null) {
+			Log.e(TAG, "events are null");
+		}
+		ArrayList<String> types = new ArrayList<>();
+		ArrayList<Event> events = new ArrayList<>();
+		for (Event event : mEvents) {
+			if ( !types.contains(event.getEventType().toLowerCase()) ) {
+				types.add(event.getEventType().toLowerCase());
+				events.add(event);
+			}
+		}
+		String[] results = new String[types.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = events.get(i).getEventType();
+		}
+		return results;
+	}
+	
+	public static void clear() {
+		SINGLETON = null;
 	}
 	
 }// *************************** THE END *******************************

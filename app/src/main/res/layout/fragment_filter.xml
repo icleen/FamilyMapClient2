@@ -7,9 +7,145 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/filter_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/father_side_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/father_side_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <Switch
+                android:id="@+id/father_side_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/off_button"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/father_side_descriptor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/father_side_descriptor"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/mother_side_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mother_side_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <Switch
+                android:id="@+id/mother_side_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/off_button"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mother_side_descriptor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mother_side_descriptor"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/male_side_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male_events_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <Switch
+                android:id="@+id/male_side_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/off_button"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/male_descriptor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gender_events_descriptor"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/female_side_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female_events_title"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"/>
+
+            <Switch
+                android:id="@+id/female_side_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/off_button"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/female_side_descriptor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gender_events_descriptor"
+            style="?android:listSeparatorTextViewStyle"/>
 
     </LinearLayout>
 

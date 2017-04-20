@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -44,7 +48,7 @@ public class PersonFragment extends Fragment {
 	private EventAdapter mEventAdapter;
 	private FamilyAdapter mFamilyAdapter;
 	
-	private Person mPerson;
+	private static Person mPerson;
 	
 	public PersonFragment() { // Required empty public constructor
 	}
@@ -66,11 +70,16 @@ public class PersonFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		( (AppCompatActivity) getActivity() ).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		if (getArguments() == null) {
 			throw new IllegalArgumentException();
 		}
 		String personId = getArguments().getString(ARG_PARAM);
-		mPerson = UserInfo.get().getPerson(personId);
+		if (personId != null) {
+			mPerson = UserInfo.get().getPerson(personId);
+		}
+		
 	}
 	
 	@Override
@@ -109,6 +118,37 @@ public class PersonFragment extends Fragment {
 		updateUI();
 		
 		return view;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.person_toolbar, menu);
+		
+		MenuItem item = null;
+		Drawable icon = null;
+		item = menu.findItem(R.id.go_to_top);
+		icon = new IconDrawable(getContext(), Iconify.IconValue.fa_angle_double_up).sizeDp(40);
+		item.setIcon(icon);
+		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				getActivity().finish();
+				return true;
+			case R.id.go_to_top:
+				Log.d(TAG, "Going to the top");
+				intent = new Intent(getActivity(), MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(intent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	private void updateUI() {
@@ -193,8 +233,10 @@ public class PersonFragment extends Fragment {
 		
 		@Override
 		public void onClick(View view) {
-			Intent intent = PersonActivity.newIntent(getContext(), mFamilyPerson.getId());
-			startActivity(intent);
+			if (mFamilyPerson != null) {
+				Intent intent = PersonActivity.newIntent(getContext(), mFamilyPerson.getId());
+				startActivity(intent);
+			}
 		}
 		
 	}
@@ -255,6 +297,7 @@ public class PersonFragment extends Fragment {
 		@Override
 		public void onClick(View view) {
 			try {
+				Log.d(TAG, "puttiing the event id in the intent: " + mEvent.getEventId());
 				Intent intent = MapActivity.newIntent(getContext(), mEvent.getEventId());
 				startActivity(intent);
 			} catch (Exception e) {

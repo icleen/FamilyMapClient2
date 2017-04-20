@@ -5,56 +5,27 @@
              tools:context="cs240.iainlee.familymapclient.FamilyMapFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/logout_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logout_button"/>
-
-            <Button
-                android:id="@+id/settings_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="settings"/>
-
-            <Button
-                android:id="@+id/filter_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="filters"/>
-
-            <Button
-                android:id="@+id/search_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="search"/>
-
-        </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp">
 
         <fragment
             android:id="@+id/mapFragment"
             android:layout_gravity="center"
-            android:layout_width="570dp"
-            android:layout_height="780dp"
+            android:layout_width="match_parent"
+            android:layout_height="750dp"
             class="com.amazon.geo.mapsv2.MapFragment" />
 
         <LinearLayout
             android:id="@+id/event_info_window"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/event_window_image2"
