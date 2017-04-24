@@ -251,7 +251,8 @@ public class FamilyMapFragment extends Fragment {
 		amazonMap.clear();
 		
 		if (mCurrentEvent != null) {
-			LatLng ll = new LatLng(Double.parseDouble(mCurrentEvent.getLatitude()), Double.parseDouble(mCurrentEvent.getLongitude()));
+			LatLng ll = new LatLng(Double.parseDouble(mCurrentEvent.getLatitude()),
+					Double.parseDouble(mCurrentEvent.getLongitude()));
 			amazonMap.animateCamera( CameraUpdateFactory.newLatLng( ll ) );
 		}
 		
@@ -304,7 +305,8 @@ public class FamilyMapFragment extends Fragment {
 		}
 		String fName = person.getFirstName(), lName = person.getLastName();
 		mEventName.setText(fName + " " + lName);
-		mEventInfo.setText(event.getEventType() + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")");
+		mEventInfo.setText(event.getEventType() + ": " + event.getCity() + ", "
+				+ event.getCountry() + " (" + event.getYear() + ")");
 		if (person.getGender().equals("m")) {
 			Drawable genderIcon = new IconDrawable(getContext(), Iconify.IconValue.fa_male).
 					colorRes(R.color.colorPrimary).sizeDp(40);
